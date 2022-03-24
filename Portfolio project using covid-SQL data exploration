@@ -1,0 +1,58 @@
+## inspecting our data, observing what data we have to work with
+
+SELECT *
+FROM bigquery-public-data.covid19_usafacts.summary
+
+## looking at total number of confirmed cases and deaths in each state
+
+SELECT state, SUM(confirmed_cases) AS total_number_of_cases,SUM(deaths) AS total_number_of_deaths
+FROM bigquery-public-data.covid19_usafacts.summary
+GROUP BY state 
+ORDER BY total_number_of_deaths DESC
+LIMIT 50
+
+
+## Looking at total confirmed cases vs total deaths per state as a percentage in each state,
+
+SELECT state, SUM(confirmed_cases) AS total_confirmed_cases,SUM(deaths)AS total_number_of_deaths, SUM(deaths)/SUM(confirmed_cases)*100 AS death_percentage
+FROM bigquery-public-data.covid19_usafacts.summary
+GROUP BY state
+ORDER BY death_percentage DESC
+LIMIT 50
+
+
+##How many confirmed cases and how many deaths there were in the US total in the millions
+
+SELECT SUM(confirmed_cases)/1000000 AS total_cases_in_US_in_millions, SUM(deaths)/1000000 AS total_deaths_in_US_in_millions
+FROM bigquery-public-data.covid19_usafacts.summary
+
+
+## How many cases and deaths in each county in Oregon, looking at which counties were hardest hit
+
+SELECT state,SUM(confirmed_cases) AS cases_per_county,SUM(deaths) AS deaths_per_county,county_name
+FROM bigquery-public-data.covid19_usafacts.summary
+WHERE state LIKE '%OR%'
+GROUP BY state,county_name
+ORDER BY cases_per_county DESC
+
+## Looking at counties total confirmed cases and deaths, starting from the most confirmed cases
+
+SELECT county_name,SUM(confirmed_cases) AS total_cases, SUM(deaths) AS total_deaths
+FROM bigquery-public-data.covid19_usafacts.summary
+GROUP BY county_name
+ORDER BY total_cases DESC
+
+
+##looking at the confirmed cases and deaths per state over time
+
+SELECT state,confirmed_cases,deaths,date
+FROM bigquery-public-data.covid19_usafacts.summary
+ORDER BY date ASC
+
+
+##joining two tables
+
+SELECT death.death, confirmed_cases.cases
+FROM bigquery-public-data.covid19_usafacts.deaths AS deaths
+JOIN bigquery-public-data.covid19_usafacts.confirmed_cases AS cases
+ON date.deaths = date.cases
