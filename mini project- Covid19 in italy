@@ -1,0 +1,54 @@
+## this mini-project looks at Covid 19 in Italy. Data was provided by googles data warehouse big query.
+
+
+## lets look at which regions and provinces had the most confirmed cases of covid by date
+
+SELECT a.province_name,b.region_name,SUM(a.confirmed_cases)AS cases_in_province,SUM(b.total_confirmed_cases)AS cases_in_region,
+c.date
+FROM bigquery-public-data.covid19_italy.data_by_province AS a
+JOIN bigquery-public-data.covid19_italy.data_by_region AS b
+ON a.name = b.region_name
+JOIN bigquery-public-data.covid19_italy.national_trends AS c
+ON b.date = c.date
+GROUP BY b.region_name,a.province_name, c.date
+ORDER BY c.date ASC 
+
+
+## looking at the percent of hospitalized patients as with respect to total confimred cases regionally with respect to the date
+
+SELECT a.name AS region,(SUM(b.total_hospitalized_patients) / SUM(b.total_current_confirmed_cases)) *100 as percent_hospitalized,c.date
+FROM bigquery-public-data.covid19_italy.data_by_province AS a
+JOIN bigquery-public-data.covid19_italy.data_by_region AS b
+ON a.country = b.country
+JOIN bigquery-public-data.covid19_italy.national_trends AS c
+ON b.date = c.date 
+GROUP BY date,a.name
+order by date ASC 
+
+
+##looking at people dead in each region with respect to the date
+
+SELECT a.name AS region_name,SUM(b.deaths) AS deaths_in_region,c.date AS date
+FROM bigquery-public-data.covid19_italy.data_by_province AS a
+JOIN bigquery-public-data.covid19_italy.data_by_region AS b
+ON a.name = b.region_name
+JOIN bigquery-public-data.covid19_italy.national_trends AS c
+ON b.date = c.date 
+GROUP BY a.name,c.date
+Order by c.date ASC 
+
+
+## looking at the the number of people on intensive care vs the number of people who have died in a given region and province on a given date 
+
+SELECT a.name AS region_name,a.province_name,SUM(b.hospitalized_patients_intensive_Care) AS patients_in_intensive_care,SUM(b.deaths)AS deaths,c.date
+FROM bigquery-public-data.covid19_italy.data_by_province AS a
+JOIN bigquery-public-data.covid19_italy.data_by_region AS b
+ON a.name = b.region_name
+JOIN bigquery-public-data.covid19_italy.national_trends AS c
+ON b.date = c.date 
+GROUP BY a.name,a.province_name,c.date
+order by c.date ASC
+
+
+
+
