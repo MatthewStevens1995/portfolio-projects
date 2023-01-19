@@ -1,0 +1,56 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Jan  4 13:00:59 2023
+
+@author: mstevens
+"""
+
+# here we are going to scrape hacker news to only retrieve news stories with
+# more than 100 likes
+#--------------------------------imports---------------------------
+# requests allow us to run requests on webpages, is required to download the
+#HTML. effectivly behaves as a browser
+import requests
+#beautiful soup allows us to get HTML from websites, "scraping the site"
+from bs4 import BeautifulSoup 
+#used to make terminal print outputs look better
+import pprint
+
+res = requests.get('https://news.ycombinator.com/news')
+res2 = requests.get('https://news.ycombinator.com/news?p=2')
+
+#this converts the string encapsulated by the res variable to useful HTML we can more easily use.
+# this is effrctivly the data for the project
+soup = BeautifulSoup(res.text,'html.parser')
+soup2 = BeautifulSoup(res2.text,'html.parser')
+
+links = soup.select('.titleline')
+subtext = soup.select('.subtext')
+links2 = soup2.select('.titleline')
+subtext2 = soup2.select('.subtext')
+
+mega_links = links + links2
+mega_subtext = subtext + subtext2
+
+"""sorts the scraping results the proceeding function, in desceing order by 'votes' """
+def sort_stories_by_votes(hnlist):
+    return sorted(hnlist,key=lambda K:K['votes'],reverse=True)
+
+
+""" creating a function that gets the title, link, and the number of votes for a given post
+    on Hacker news, and assigns each post an index number. returns all stories with 100 or more 
+    votes. this scrapes the first 2 pages. """
+    
+def create_custom_hn(links,subtext):
+    hn=[]
+    for idx,item in enumerate(links):
+        title = item.getText()
+        href = item.get('href', None)
+        vote = subtext[idx].select('.score')
+        if len(vote):
+            points = int(vote[0].getText().replace(' points',''))
+            if points > 99:
+                hn.append({'title':title,'link': href,'votes': points})
+    return sort_stories_by_votes(hn)
+
+pprint.pprint(create_custom_hn(mega_links, mega_subtext))
