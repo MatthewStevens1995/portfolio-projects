@@ -1,0 +1,66 @@
+# Ultimate purpose: using a ML model to predict the species of iris flower based on feature data from the flower inputted. 
+
+# Here we are importing the iris dataset from the sklearn library. The dataset is pre-cleaned so there is no need to perform
+# cleaning on the data
+
+
+#---------------------------------------------imports required--------------------------------------
+
+#import base dataset
+from sklearn.datasets import load_iris
+
+
+# function that splits training and test data
+from sklearn.model_selection import train_test_split
+
+# import k nearest neighbors model
+from sklearn.neighbors import KNeighborsClassifier
+
+#import a function that can tell you the accuracy of your model
+from sklearn import metrics
+#-----------------------------------------viewing and preprocessing data for model---------------------
+
+# loading base dataset
+iris=load_iris()
+
+#printing the data in the console. this data represents input data, data is structured as a numpy array.
+iris.data
+
+# this data represents the ouput from the data, what we want our algo to find a function for to predict this data from inputs.
+# data structure used is a numpy array. 
+iris.target
+
+
+# assigning input and output data to variables. 
+x = iris.data
+y=iris.target
+
+# assigning names to target and feature data, assigning it to a variable in memory
+feature_names = iris.feature_names
+target_names = iris.target_names
+
+# print feature names and target names in console to observe the data
+feature_names
+target_names
+
+#------------------------------splitting data into test and train datasets--------------------------
+
+# this splits the data and defines the test data size as using 60% of our total dataset
+x_train,x_test,y_train,y_test = train_test_split(x,y, test_size=0.6)
+
+#viewing dimensionality of the test and train datasets
+print(x_test.shape)
+print(x_train.shape)
+
+# choosing the number of neighbors as 3. this asks how many data points are required in a group to determine if the data in
+# that group is a given species.
+knn = KNeighborsClassifier(n_neighbors=3)
+
+# creating our model, training it on training data
+knn.fit(x_train,y_train)
+
+# assigning our predictions of y, based on x to a variable, these predictions will be compared aganist 'y_test' later on
+y_pred = knn.predict(x_test)
+
+# here we compare our y_predictions to the test data, and our model is 100% accurate.
+print(metrics.accuracy_score(y_test, y_pred))
