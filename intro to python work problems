@@ -1,0 +1,92 @@
+from math import pi
+
+from math import pi
+
+pie = pi
+
+#verifying pie is what we expect
+print(pie)
+
+#radius = float(input("whats the radius of the sphere?: ")
+
+#Area = 4*pie*radius**2
+#Volume = (4/3)*pie*radius**2
+
+def radius_and_volume(radius:float):
+   ## radius = float(input("whats the radius of the sphere?: ")
+    Area = 4*pie*radius**2
+    Volume = (4/3)*pie*radius**2
+    print('the area of a sphere is: ', round(Area,3),
+        'the volume of the sphere is ', round(Volume,3))
+    
+radius_and_volume(7)
+
+
+# writing a program that calculates the cost per square inch for a circular pizza, given
+# diameter and price. circle area = pi*R**2
+
+def cost_per_square_inch(diameter:float,price:float):
+    radius = diameter/2
+    Area = pie*radius**2
+    price_per_square_inch = price*((1/Area))
+    print('the cost per square inch is: ',price_per_square_inch)
+
+cost_per_square_inch(12,18) # not sure if this is missing a **2 to square or not.
+
+
+
+## a program that determines the molecular weight of a molecule
+def molecular_weight():
+
+    # asking user for number of each atom in molecule
+    C,H,O = eval(input("How many carbon atoms, How many Hydrogen atoms, and How many Oxygen atoms , in the molecule? :"))
+
+# establishing molecular weights
+    carbon_weight = C*12.0107
+    Hydrogen_weight = H*1.00794
+    Oxygen_weight = O*15.9994
+
+#adding up all the weights
+    net_molecule_weight = carbon_weight + Hydrogen_weight + Oxygen_weight
+
+    # printing output
+    print('the molecular weight of the molecule is:',net_molecule_weight,"g/mole")
+
+molecular_weight()
+
+
+# a program that determines the distance to a lightening strike based on time elapsed between flash and 
+# the speed of sound
+def distance_from_lightening():
+
+    #establishing constants
+    speed_of_sound = 1100
+    mile_dist = 5280
+
+    #getting the time elapsed since seeing lightening
+    time_elapsed = float(input("how much time elapsed between when you saw and when you heard it? : "))
+    
+    # telling user how far the lightening stike was from user
+    print('the lightening strike was',time_elapsed*speed_of_sound,"feet away")
+
+distance_from_lightening()
+
+
+#Heres a program that determines cost of an order
+def cost_of_order():
+    shipping = .86 + 1.5
+    cost_of_coffee = 10.5 + shipping
+    print("the cost of an order is ",cost_of_coffee, "dollars")
+
+cost_of_order()
+
+
+# writng a program that determines the slope between two points in a plane given the inputs
+def slope():
+    x1,y1,x2,y2 = eval(input("what are the coordinates of the two points in question? "))
+    slope_bby = (y2-y1)/(x2-x1)
+    print("the slope is: ",slope_bby)
+
+slope()
+    
+
